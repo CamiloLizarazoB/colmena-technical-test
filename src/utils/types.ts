@@ -16,7 +16,7 @@ export type TComment = {
 export type TAddPostRequest = {
     title: string,
     body: string,
-    userId: string
+    userId: number
 }
 export type TEditPostRequest = {
     title: string,

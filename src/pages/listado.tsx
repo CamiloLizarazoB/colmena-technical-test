@@ -1,7 +1,8 @@
+import { addPost } from "@/api/api";
 import DialogFormComponent from "@/components/dialog-form/dialog-form.component";
 import SelectComponent from "@/components/select/select.component";
 import { usePublications } from "@/hooks/publications.hook";
-import { TEditPostRequest, TPost } from "@/utils/types";
+import { TAddPostRequest, TEditPostRequest, TPost } from "@/utils/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -20,6 +21,7 @@ export default function Listado() {
     editPost,
     getUsers,
     dataFiltered,
+    addPost,
   } = usePublications(page, userId);
   const { data: dataUsers } = getUsers;
   const { isSuccess: isSuccessEdited } = editPost;
@@ -44,6 +46,12 @@ export default function Listado() {
       ...data,
       id: publication.id,
       userId: publication.userId,
+    });
+  };
+  const handleAddPost = (data: TAddPostRequest) => {
+    addPost.mutate({
+      ...data,
+      userId: 1
     });
   };
 
@@ -76,6 +84,11 @@ export default function Listado() {
       </h1>
       <div>
         <SelectComponent users={dataUsers} handleSetUserId={handleSetUserId} />
+      </div>
+      <div className="px-6 pt-10 pb-5">
+        <DialogFormComponent
+          handleAddPost={handleAddPost}
+        />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
         {(!isLoading || publications.length > 0) && filterActive
