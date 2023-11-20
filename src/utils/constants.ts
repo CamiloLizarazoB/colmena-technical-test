@@ -3,6 +3,7 @@ export const ENV = {
     API_URL: "https://jsonplaceholder.typicode.com",
     ENDPOINTS: {
         PUBLICATIONS: "/comments",
-        POSTS: "/posts"
+        POSTS: "/posts",
+        USERS: "/users"
     }
 }
