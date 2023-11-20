@@ -43,9 +43,7 @@ export default function DialogFormComponent({
     setOpen(false);
   };
 
-  const onSubmit: SubmitHandler<TFormData> = (
-    data: TEditPostRequest
-  ) => {
+  const onSubmit: SubmitHandler<TFormData> = (data: TEditPostRequest) => {
     if (handleEditPost && publication) {
       handleEditPost(data, publication);
       handleClose();
@@ -54,8 +52,8 @@ export default function DialogFormComponent({
       const addPostData = {
         title: data.title,
         body: data.body,
-        userId: 1
-      }
+        userId: 1,
+      };
       handleAddPost(addPostData);
       handleClose();
     }
@@ -64,9 +62,11 @@ export default function DialogFormComponent({
   return (
     <Wrapper>
       {publication ? (
-        <Button variant="outlined" onClick={handleClickOpen}>
-          Edit
-        </Button>
+        <div className="edit-button">
+          <Button variant="outlined" onClick={handleClickOpen}>
+            Edit
+          </Button>
+        </div>
       ) : (
         <TButonComponent onClick={handleClickOpen} />
       )}
