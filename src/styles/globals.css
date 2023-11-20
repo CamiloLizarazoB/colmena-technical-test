@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.margin-auto {
+    margin: auto;
+}
