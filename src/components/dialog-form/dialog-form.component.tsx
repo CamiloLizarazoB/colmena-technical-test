@@ -7,7 +7,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { TextFieldStyled, Wrapper } from "../styles";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { TEditPostRequest, TPost } from "@/utils/types";
+import { TEditPostRequest, TPost, TAddPostRequest } from "@/utils/types";
+import TButonComponent from "../t-button.tsx/t-button.component";
 
 type TFormData = {
   id: number;
@@ -19,16 +20,18 @@ type TFormData = {
 export default function DialogFormComponent({
   publication,
   handleEditPost,
+  handleAddPost,
 }: {
-  publication: TPost;
-  handleEditPost: (data: TEditPostRequest, publication: TPost) => void;
+  publication?: TPost;
+  handleEditPost?: (data: TEditPostRequest, publication: TPost) => void;
+  handleAddPost?: (data: TAddPostRequest) => void;
 }) {
   const [open, setOpen] = useState(false);
   const { register, handleSubmit } = useForm<TFormData>({
     mode: "onChange",
     defaultValues: {
-      title: publication.title,
-      body: publication.body,
+      title: publication?.title,
+      body: publication?.body,
     },
   });
 
@@ -40,16 +43,33 @@ export default function DialogFormComponent({
     setOpen(false);
   };
 
-  const onSubmit: SubmitHandler<TFormData> = (data: TEditPostRequest) => {
-    handleEditPost(data, publication)
-    handleClose()
+  const onSubmit: SubmitHandler<TFormData> = (
+    data: TEditPostRequest
+  ) => {
+    if (handleEditPost && publication) {
+      handleEditPost(data, publication);
+      handleClose();
+    }
+    if (handleAddPost) {
+      const addPostData = {
+        title: data.title,
+        body: data.body,
+        userId: 1
+      }
+      handleAddPost(addPostData);
+      handleClose();
+    }
   };
 
   return (
     <Wrapper>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Edit
-      </Button>
+      {publication ? (
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Edit
+        </Button>
+      ) : (
+        <TButonComponent onClick={handleClickOpen} />
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
