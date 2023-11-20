@@ -1,24 +1,6 @@
-import { Publications } from "@/api/publications";
-import { Publication } from "@/utils/types";
-import { useEffect, useState } from "react";
+import { useGetPosts } from "@/api";
 
-const publicationsCtr = new Publications();
-
-export function usePublications() {
-  const [publications, setPublications] = useState<Publication[]>();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await publicationsCtr.getPublications();
-        setPublications(response);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, []);
-
-  return {
-    publications,
-  };
-}
+export const usePublications = (page = 0) => {
+  const { data, isLoading, isRefetching, isSuccess } = useGetPosts(page);
+  return { data, isLoading, isRefetching, isSuccess };
+};
