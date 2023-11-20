@@ -16,6 +16,12 @@ Check that Yarn is installed by running
 yarn --version
 ```
 
+Install packages with
+
+```bash
+yarn
+```
+
 Them you have run with
 
 ```bash
