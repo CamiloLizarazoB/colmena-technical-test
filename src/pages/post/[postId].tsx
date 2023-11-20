@@ -1,4 +1,5 @@
 import { usePostContent } from "@/hooks/post-content.hook";
+import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function PostPage() {
@@ -11,6 +12,18 @@ export default function PostPage() {
       <h1 className="title text-4xl font-normal text-center m-10">
         {`Comentarios para el post ${query.postId}`}
       </h1>
+      <div
+        className="margin-auto relative flex h-64 w-96 cursor-pointer flex-col overflow-hidden rounded-xl bg-white bg-clip-border text-gray-700 shadow-md transition-opacity hover:opacity-90"
+        data-dialog-target="image-dialog"
+      >
+        <Image
+          src="https://via.placeholder.com/600/92c952/"
+          alt="image1"
+          width={300}
+          height={300}
+          className="h-full w-full object-cover object-center"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
         {isLoading
           ? [...new Array(10)].map((_, i) => (
