@@ -16,7 +16,7 @@ Check that Yarn is installed by running
 yarn --version
 ```
 
-Next you have run with
+Them you have run with
 
 ```bash
 yarn dev
