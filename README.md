@@ -2,16 +2,24 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+This code is optimized for yarn package manager
+
+Once you have npm installed you can run the following both to install and upgrade Yarn:
 
 ```bash
-npm run dev
-# or
+npm install --global yarn
+```
+
+Check that Yarn is installed by running
+
+```bash
+yarn --version
+```
+
+Next you have run with
+
+```bash
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
