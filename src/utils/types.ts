@@ -18,3 +18,9 @@ export type addPostRequest = {
     body: string,
     userId: string
 }
+export type editPostRequest = {
+    title: string,
+    body: string,
+    userId: number,
+    id: number
+}
