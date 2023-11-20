@@ -5,9 +5,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { TextFieldStyled, Wrapper } from "./styles";
+import { TextFieldStyled, Wrapper } from "../styles";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { editPostRequest, Post } from "@/utils/types";
+import { TEditPostRequest, TPost } from "@/utils/types";
 
 type TFormData = {
   id: number;
@@ -20,8 +20,8 @@ export default function DialogFormComponent({
   publication,
   handleEditPost,
 }: {
-  publication: Post;
-  handleEditPost: (data: editPostRequest, publication: Post) => void;
+  publication: TPost;
+  handleEditPost: (data: TEditPostRequest, publication: TPost) => void;
 }) {
   const [open, setOpen] = useState(false);
   const { register, handleSubmit } = useForm<TFormData>({
@@ -40,7 +40,7 @@ export default function DialogFormComponent({
     setOpen(false);
   };
 
-  const onSubmit: SubmitHandler<TFormData> = (data: editPostRequest) => {
+  const onSubmit: SubmitHandler<TFormData> = (data: TEditPostRequest) => {
     handleEditPost(data, publication)
     handleClose()
   };
