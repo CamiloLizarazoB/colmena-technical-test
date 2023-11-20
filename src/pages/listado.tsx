@@ -11,6 +11,7 @@ export default function Listado() {
   const [page, setPage] = useState(1);
   const [userId, setUserId] = useState<number>();
   const [filterActive, setFilterActive] = useState<boolean>(false);
+  const [localData, setLocalData] = useState<TPost[]>([]);
 
   const [publications, setPublications] = useState<TPost[]>([]);
   const {
@@ -20,10 +21,11 @@ export default function Listado() {
     deletePost,
     editPost,
     getUsers,
-    dataFiltered,
+    dataFiltered = [],
     addPost,
   } = usePublications(page, userId);
   const { data: dataUsers } = getUsers;
+  const { isSuccess: isSuccessAdd, data: resposeAdd } = addPost;
   const { isSuccess: isSuccessEdited } = editPost;
   const { ref, inView } = useInView();
 
@@ -51,7 +53,7 @@ export default function Listado() {
   const handleAddPost = (data: TAddPostRequest) => {
     addPost.mutate({
       ...data,
-      userId: 1
+      userId: 1,
     });
   };
 
@@ -77,6 +79,29 @@ export default function Listado() {
     }
   }, [isSuccessEdited]);
 
+  useEffect(() => {
+    if (isSuccessAdd) {
+      const dataLocalString = localStorage.getItem("local-posts");
+      localStorage.setItem(
+        "local-posts",
+        `${JSON.stringify(resposeAdd)}${dataLocalString ? "," : ""}${
+          !!dataLocalString ? dataLocalString : ""
+        }`
+      );
+      const dataLocalArray = JSON.parse(
+        `[${localStorage.getItem("local-posts")}]`
+      );
+      setLocalData(dataLocalArray);
+    }
+  }, [isSuccessAdd]);
+
+  useEffect(() => {
+    const dataLocalArray = JSON.parse(
+      `[${localStorage.getItem("local-posts")}]`
+    );
+    setLocalData(dataLocalArray);
+  }, []);
+
   return (
     <div className="container mx-auto px-10 w-screen pb-28">
       <h1 className="title text-4xl font-normal text-center m-10">
@@ -86,13 +111,11 @@ export default function Listado() {
         <SelectComponent users={dataUsers} handleSetUserId={handleSetUserId} />
       </div>
       <div className="px-6 pt-10 pb-5">
-        <DialogFormComponent
-          handleAddPost={handleAddPost}
-        />
+        <DialogFormComponent handleAddPost={handleAddPost} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
         {(!isLoading || publications.length > 0) && filterActive
-          ? dataFiltered?.map((publication) => (
+          ? [...localData, ...dataFiltered]?.map((publication) => (
               <div
                 key={publication.id}
                 className="max-w-md mx-full bg-white rounded-xl shadow overflow-hidden md:max-w-2xl m-5"
@@ -100,13 +123,13 @@ export default function Listado() {
                 <button
                   className="float-right m-2.5 item-center middle none center flex justify-center rounded-lg bg-pink-500 p-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   data-ripple-light="true"
-                  onClick={handleDeletePost.bind(null, publication.id)}
+                  onClick={handleDeletePost.bind(null, publication?.id)}
                 >
                   {"X"}
                 </button>
                 <div className="p-8">
                   <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-                    {publication.title}
+                    {publication?.title}
                   </div>
                   <Link href={`/post/${publication.id}`}>{"Ver más..."}</Link>
                   <p className="mt-2 text-gray-500">{publication.body}</p>
@@ -117,24 +140,24 @@ export default function Listado() {
                 />
               </div>
             ))
-          : publications?.map((publication) => (
+          : [...localData, ...publications]?.map((publication) => !!publication && (
               <div
-                key={publication.id}
+                key={publication?.id}
                 className="max-w-md mx-full bg-white rounded-xl shadow overflow-hidden md:max-w-2xl m-5"
               >
                 <button
                   className="float-right m-2.5 item-center middle none center flex justify-center rounded-lg bg-pink-500 p-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   data-ripple-light="true"
-                  onClick={handleDeletePost.bind(null, publication.id)}
+                  onClick={handleDeletePost.bind(null, publication?.id)}
                 >
                   {"X"}
                 </button>
                 <div className="p-8">
                   <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-                    {publication.title}
+                    {publication?.title}
                   </div>
-                  <Link href={`/post/${publication.id}`}>{"Ver más..."}</Link>
-                  <p className="mt-2 text-gray-500">{publication.body}</p>
+                  <Link href={`/post/${publication?.id}`}>{"Ver más..."}</Link>
+                  <p className="mt-2 text-gray-500">{publication?.body}</p>
                 </div>
                 <DialogFormComponent
                   publication={publication}
